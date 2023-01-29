@@ -1,10 +1,13 @@
 package todo
 
 import (
+	"bufio"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -78,4 +81,35 @@ func (l *List) Get(filename string) error {
 		return nil
 	}
 	return json.Unmarshal(file, l)
+}
+
+func (l *List) String() string {
+	formatted := ""
+	for k, t := range *l {
+		prefix := " "
+		if t.Done {
+			prefix = "X "
+		}
+		// Adjust the item number k to print numbers starting from 1 instead of 0
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+	}
+	return formatted
+}
+
+// getTask function decides where to get the description for a new
+// task from: arguments or STDIN
+
+func GetTask(r io.Reader, args ...string) (string, error) {
+	if len(args) > 0 {
+		return strings.Join(args, " "), nil
+	}
+	s := bufio.NewScanner(r)
+	s.Scan()
+	if err := s.Err(); err != nil {
+		return "", err
+	}
+	if len(s.Text()) == 0 {
+		return "", fmt.Errorf("Task cannot be blank")
+	}
+	return s.Text(), nil
 }
