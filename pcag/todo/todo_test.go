@@ -1,15 +1,13 @@
-package todo_test
+package todo
 
 import (
-	"github.com/goldennovember/month-series/february/todo"
-	"io/ioutil"
 	"os"
 	"testing"
 )
 
 // TestAdd tests the Add method of the List type
 func TestAdd(t *testing.T) {
-	l := todo.List{}
+	l := List{}
 	taskName := "New Task"
 	l.Add(taskName)
 	if l[0].Task != taskName {
@@ -19,7 +17,7 @@ func TestAdd(t *testing.T) {
 
 // TestComplete tests the Complete method of the List type
 func TestComplete(t *testing.T) {
-	l := todo.List{}
+	l := List{}
 	taskName := "New Task"
 	l.Add(taskName)
 	if l[0].Task != taskName {
@@ -28,7 +26,9 @@ func TestComplete(t *testing.T) {
 	if l[0].Done {
 		t.Errorf("New task should not be completed.")
 	}
+
 	l.Complete(1)
+
 	if !l[0].Done {
 		t.Errorf("New task should be completed.")
 	}
@@ -36,7 +36,7 @@ func TestComplete(t *testing.T) {
 
 // TestDelete tests the Delete method of the List type
 func TestDelete(t *testing.T) {
-	l := todo.List{}
+	l := List{}
 	tasks := []string{
 		"New Task 1",
 		"New Task 2",
@@ -59,14 +59,14 @@ func TestDelete(t *testing.T) {
 
 // TestSaveGet tests the Save and Get methods of the List type
 func TestSaveGet(t *testing.T) {
-	l1 := todo.List{}
-	l2 := todo.List{}
+	l1 := List{}
+	l2 := List{}
 	taskName := "New Task"
 	l1.Add(taskName)
 	if l1[0].Task != taskName {
 		t.Errorf("Expected %q, got %q instead.", taskName, l1[0].Task)
 	}
-	tf, err := ioutil.TempFile("", "")
+	tf, err := os.CreateTemp("", "")
 	if err != nil {
 		t.Fatalf("Error creating temp file: %s", err)
 	}
