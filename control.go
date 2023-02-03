@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/goldennovember/control/pcag/todo"
-	"github.com/goldennovember/control/pcag/wc"
+	"github.com/goldennovember/control/todo"
+	"github.com/goldennovember/control/wc"
 	"os"
 )
 
