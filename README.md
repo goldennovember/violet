@@ -14,7 +14,7 @@ Count the number of words in a file
 ```go
 control -count -words
 ```
-
+test time zone
 Count the number of bytes in a file
 
 ```go
