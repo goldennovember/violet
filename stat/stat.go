@@ -1,11 +1,25 @@
-package wc
+package main
 
 import (
 	"bufio"
+	"flag"
+	"fmt"
 	"io"
+	"os"
 )
 
-func Count(r io.Reader, countWords bool, countBytes bool) int {
+func main() {
+
+	word := flag.Bool("w", false, "Count word")
+	byte := flag.Bool("b", false, "Count byte")
+
+	// Parsing the flags provided by the user
+	flag.Parse()
+
+	fmt.Println(count(os.Stdin, *word, *byte))
+}
+
+func count(r io.Reader, countWords bool, countBytes bool) int {
 
 	// A scanner is used to read text from a Reader (such as files)
 	scanner := bufio.NewScanner(r)

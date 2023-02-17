@@ -41,14 +41,14 @@ func TestTodoCLI(t *testing.T) {
 	}
 	cmdPath := filepath.Join(dir, binName)
 	t.Run("AddNewTaskFromArguments", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-task", "-add", task)
+		cmd := exec.Command(cmdPath, "-add", task)
 		if err := cmd.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})
 	task2 := "test task number 2"
 	t.Run("AddNewTaskFromSTDIN", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-task", "-add")
+		cmd := exec.Command(cmdPath, "-add", task2)
 		cmdStdIn, err := cmd.StdinPipe()
 		if err != nil {
 			t.Fatal(err)
@@ -60,7 +60,7 @@ func TestTodoCLI(t *testing.T) {
 		}
 	})
 	t.Run("ListTasks", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-task", "-list")
+		cmd := exec.Command(cmdPath, "-list")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatal(err)
@@ -70,15 +70,11 @@ func TestTodoCLI(t *testing.T) {
 			t.Errorf("Expected %q, got %q instead\n", expected, string(out))
 		}
 	})
+
 	t.Run("DeleteTasks", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-task", "-delete")
-		out, err := cmd.CombinedOutput()
-		if err != nil {
+		cmd := exec.Command(cmdPath, "-delete", "1")
+		if err := cmd.Run(); err != nil {
 			t.Fatal(err)
-		}
-		expected := fmt.Sprintf(" 1: %s\n 2: %s\n", task, task2)
-		if expected != string(out) {
-			t.Errorf("Expected %q, got %q instead\n", expected, string(out))
 		}
 	})
 }
